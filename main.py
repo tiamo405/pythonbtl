@@ -6,6 +6,7 @@ import pygame.gfxdraw
 from label import *
 from button import Button
 from data import questions
+from utils import *
 pygame.init()
 
 screen = pygame.display.set_mode((1280, 720))
@@ -174,6 +175,8 @@ def check_score(answered="wrong"):
         title.change_text("And Game", color="cyan")
         score.change_text("You reached a score of " + str(points))
         num_question.change_text(newtext= "and game")
+        # kill()
+        save_point(name_player, points)
     time.sleep(.5)
 
 
@@ -303,14 +306,15 @@ def options():
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
         screen.fill("white")
+        df = pd.read_csv('rank.csv')
+        for i in range(len(df)):
+            OPTIONS_TEXT = get_font(45).render(
+                str(df['name_player'][i])+ " "+ str(df['score'][i]), True, "Black")
+            OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 100+ i*100))
+            screen.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
-        OPTIONS_TEXT = get_font(45).render(
-            "This is the OPTIONS screen.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
-        screen.blit(OPTIONS_TEXT, OPTIONS_RECT)
-
-        OPTIONS_BACK = Button(image=None, pos=(640, 460),
-                              text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
+        OPTIONS_BACK = Button(image=None, pos=(1220, 700),
+                              text_input="BACK", font=get_font(25), base_color="Black", hovering_color="Green")
 
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(screen)
@@ -339,7 +343,7 @@ def main_menu():
         PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250),
                              text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
         OPTIONS_BUTTON = Button(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 400),
-                                text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+                                text_input="RANK", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
         QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 550),
                              text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
